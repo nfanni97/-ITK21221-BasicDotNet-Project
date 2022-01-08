@@ -6,6 +6,9 @@
 # logfiles
 logs*.txt
 
+# file to test database migrations
+test.sql
+
 # User-specific files
 *.rsuser
 *.suo

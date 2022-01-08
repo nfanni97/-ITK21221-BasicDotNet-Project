@@ -13,6 +13,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
+using RegistryApp.Models;
+using Microsoft.EntityFrameworkCore;
+using RegistryApp.Services.Interfaces;
+using RegistryApp.Services.Implementations;
 
 namespace RegistryApp
 {
@@ -34,6 +38,14 @@ namespace RegistryApp
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RegistryApp", Version = "v1" });
             });
+            services.AddAutoMapper(
+                AppDomain.CurrentDomain.GetAssemblies()
+            );
+            services.AddDbContext<RegistryContext>(opt => 
+                opt.UseSqlServer(Configuration.GetConnectionString("Registry")));
+            //TODO: scoped services
+            services.AddScoped<ICategoryService,CategoryService>();
+            //TODO: authentication
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +64,7 @@ namespace RegistryApp
 
             app.UseRouting();
 
+            //TODO: authentication
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
