@@ -45,7 +45,7 @@ namespace RegistryApp
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Registry App v1"));
             } else {
-                
+                app.UseExceptionHandler("/error");
             }
 
             app.UseHttpsRedirection();
