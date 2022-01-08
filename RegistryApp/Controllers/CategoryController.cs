@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using RegistryApp.Dtos;
 using RegistryApp.Services.Interfaces;
 using RegistryApp.Vms;
 
@@ -18,8 +19,43 @@ namespace CategoryController
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CategoryVM>> GetAll() {
-            return await _categoryService.GetAll();
+        public async Task<IEnumerable<CategoryVM>> GetAll()
+        {
+            return await _categoryService.GetAllCategories();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var c = _categoryService.GetCategoryById(id);
+            if (c == null)
+            {
+                return NotFound();
+            }
+            return Ok(c);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] CategoryDto categoryDto)
+        {
+            var newCat = await _categoryService.CreateCategory(categoryDto);
+            if (newCat == null)
+            {
+                return NotFound();
+            }
+            return CreatedAtAction(nameof(Get), new { id = newCat.Id }, newCat);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return await _categoryService.DeleteCategory(id) ? NoContent() : NotFound();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] CategoryDto categoryDto)
+        {
+            return await _categoryService.UpdateCategory(id, categoryDto) ? NoContent() : NotFound();
         }
     }
 }
