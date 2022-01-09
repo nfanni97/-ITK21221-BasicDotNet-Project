@@ -40,7 +40,7 @@ namespace RegistryApp.Controllers
             if(user != null && await _userManager.CheckPasswordAsync(user,loginDto.Password)) {
                 // get roles
                 var userRoles = await _userManager.GetRolesAsync(user);
-                _logger.LogDebug($"roles: {userRoles[0]}, {userRoles[1]}");
+                //_logger.LogDebug($"roles: {userRoles[0]}, {userRoles[1]}");
                 // get claims
                 var authClaims = new List<Claim> {
                     new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),

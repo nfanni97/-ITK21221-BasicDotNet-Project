@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegistryApp.Models;
 
@@ -11,9 +12,10 @@ using RegistryApp.Models;
 namespace RegistryApp.Migrations
 {
     [DbContext(typeof(RegistryContext))]
-    partial class RegistryContextModelSnapshot : ModelSnapshot
+    [Migration("20220109182400_nullableBuyer")]
+    partial class nullableBuyer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,6 +329,7 @@ namespace RegistryApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("BuyerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BuyerName")
@@ -430,6 +433,7 @@ namespace RegistryApp.Migrations
                         .WithMany("ByMe")
                         .HasForeignKey("BuyerId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
                         .HasConstraintName("FK_RegistryItem_AspNetUsers_BuyerId");
 
                     b.HasOne("RegistryApp.Models.Product", "Product")

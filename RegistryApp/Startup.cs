@@ -38,6 +38,7 @@ namespace RegistryApp
             //TODO: scoped services
             services.AddScoped<ICategoryService,CategoryService>();
             services.AddScoped<IProductService,ProductService>();
+            services.AddScoped<IRegistryService,RegistryService>();
             //authentication
             var key = new HMACSHA256(Encoding.UTF8.GetBytes(Configuration["JWT:secret"]));
             services

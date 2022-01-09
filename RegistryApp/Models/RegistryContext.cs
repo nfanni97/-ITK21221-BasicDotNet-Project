@@ -17,14 +17,28 @@ namespace RegistryApp.Models
         {
             base.OnModelCreating(modelBuilder);//important for IdentityDbContext!
 
-            //TODO: key for registryitem
             modelBuilder.Entity<CategoryProduct>().HasKey(cp=> new {
                 cp.CategoryId,
                 cp.ProductId
             }
             );
+            modelBuilder.Entity<RegistryItem>().HasKey(ri => new {ri.Id});
+            modelBuilder.Entity<RegistryItem>()
+                .HasOne(ri => ri.Buyer)
+                .WithMany(b => b.ByMe)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasConstraintName("FK_RegistryItem_AspNetUsers_BuyerId");
+            modelBuilder.Entity<RegistryItem>()
+                .HasOne(ri => ri.Recipient)
+                .WithMany(r => r.ForMe)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasConstraintName("FK_RegistryItem_AspNetUsers_RecipientId");
+            modelBuilder.Entity<RegistryItem>()
+                .HasOne(ri=> ri.Product)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasConstraintName("FK_RegistryItem_Product_ProductId");
 
-            //TODO: seed
             modelBuilder.Entity<Category>().HasData(
                 new Category{
                     Id = 1,
@@ -66,5 +80,6 @@ namespace RegistryApp.Models
         //TODO: dbsets
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<RegistryItem> RegistryItems { get; set; }
     }
 }

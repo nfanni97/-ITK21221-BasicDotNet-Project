@@ -89,12 +89,13 @@ namespace RegistryApp.Services.Implementations
         {
             var q = _context.Products as IQueryable<Product>;
             //filter
-            if(option.Filter != null) {
+            if (option.Filter != null)
+            {
                 _logger.LogDebug($"filter nameterm: {option.Filter.NameTerm}, descr: {option.Filter.InDescription}, minprice: {option.Filter.MinPriceHuf}, maxprice: {option.Filter.MaxPriceHuf}");
             }
             if (!String.IsNullOrEmpty(option.Filter?.NameTerm))
             {
-                _logger.LogDebug("nameterm: "+option.Filter.NameTerm);
+                _logger.LogDebug("nameterm: " + option.Filter.NameTerm);
                 q = q.Where(x => x.Name.Contains(option.Filter.NameTerm));
             }
             if (option.Filter?.MinPriceHuf != null)
@@ -112,22 +113,17 @@ namespace RegistryApp.Services.Implementations
             //sort
             q = option.SortOrder == SortOrder.Ascending ? q.OrderBy(x => x.Name) : q.OrderByDescending(x => x.Name);
             //page
-            List<Product> products;
-            if(option.Page > 0) {
-                products = await q
+            var products = await q
                     .Skip((option.Page - 1) * option.PageSize)
                     .Take(option.PageSize)
                     .ToListAsync();
-            } else {
-                products = await q.ToListAsync();
-            }
             var productVMs = new List<ProductVM>();
             foreach (var product in products)
             {
                 var pvm = _mapper.Map<ProductVM>(product);
-                _logger.LogDebug("categories of product "+product.Id+": "+product.CategoryProducts);
+                _logger.LogDebug("categories of product " + product.Id + ": " + product.CategoryProducts);
                 mapCategories(product, pvm);
-                _logger.LogDebug("categories of productvm "+product.Id+": "+pvm.CategoryNames);
+                _logger.LogDebug("categories of productvm " + product.Id + ": " + pvm.CategoryNames);
                 productVMs.Add(pvm);
             }
             return productVMs;
@@ -184,7 +180,8 @@ namespace RegistryApp.Services.Implementations
             var updatedProduct = _mapper.Map<Product>(r);
             //need to save categories before overwriting!
             var oldProduct = await _context.Products.FindAsync(id);
-            if(oldProduct == null) {
+            if (oldProduct == null)
+            {
                 return false;
             }
             updatedProduct.CategoryProducts = oldProduct.CategoryProducts;

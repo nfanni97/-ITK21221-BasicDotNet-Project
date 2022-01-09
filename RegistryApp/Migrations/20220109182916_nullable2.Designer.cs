@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegistryApp.Models;
 
@@ -11,9 +12,10 @@ using RegistryApp.Models;
 namespace RegistryApp.Migrations
 {
     [DbContext(typeof(RegistryContext))]
-    partial class RegistryContextModelSnapshot : ModelSnapshot
+    [Migration("20220109182916_nullable2")]
+    partial class nullable2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
