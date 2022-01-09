@@ -10,6 +10,6 @@ namespace RegistryApp.Models
         [Required]
         [MaxLength(30)]
         public string Name { get; set; }
-        //TODO: navigation field to product
+        public virtual List<CategoryProduct> Categories { get; set; }
     }
 }

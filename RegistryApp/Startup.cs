@@ -45,6 +45,7 @@ namespace RegistryApp
                 opt.UseSqlServer(Configuration.GetConnectionString("Registry")));
             //TODO: scoped services
             services.AddScoped<ICategoryService,CategoryService>();
+            services.AddScoped<IProductService,ProductService>();
             //TODO: authentication
         }
 

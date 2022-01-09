@@ -27,7 +27,7 @@ namespace CategoryController
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var c = _categoryService.GetCategoryById(id);
+            var c = await _categoryService.GetCategoryById(id);
             if (c == null)
             {
                 return NotFound();
