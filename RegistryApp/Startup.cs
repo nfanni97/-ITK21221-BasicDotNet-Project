@@ -1,15 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
@@ -17,6 +5,10 @@ using RegistryApp.Models;
 using Microsoft.EntityFrameworkCore;
 using RegistryApp.Services.Interfaces;
 using RegistryApp.Services.Implementations;
+using RegistryApp.Models.Authentication;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Cryptography;
 
 namespace RegistryApp
 {
@@ -46,7 +38,33 @@ namespace RegistryApp
             //TODO: scoped services
             services.AddScoped<ICategoryService,CategoryService>();
             services.AddScoped<IProductService,ProductService>();
-            //TODO: authentication
+            //authentication
+            var key = new HMACSHA256(Encoding.UTF8.GetBytes(Configuration["JWT:secret"]));
+            services
+                .AddIdentity<ApplicationUser,IdentityRole>()
+                .AddEntityFrameworkStores<RegistryContext>()
+                .AddDefaultTokenProviders();
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                //  Add JWt bearer
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = false,
+                        ValidAudience = Configuration["JWT:validAudience"],
+                        ValidIssuer = Configuration["JWT:validIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:secret"])),
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,7 +83,7 @@ namespace RegistryApp
 
             app.UseRouting();
 
-            //TODO: authentication
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

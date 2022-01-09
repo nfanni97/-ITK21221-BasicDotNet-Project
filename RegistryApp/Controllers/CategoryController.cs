@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RegistryApp.Dtos;
+using RegistryApp.Models.Authentication;
 using RegistryApp.Services.Interfaces;
 using RegistryApp.Vms;
 
@@ -47,6 +49,7 @@ namespace CategoryController
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
             return await _categoryService.DeleteCategory(id) ? NoContent() : NotFound();

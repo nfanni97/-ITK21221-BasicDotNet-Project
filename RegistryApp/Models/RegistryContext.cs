@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RegistryApp.Models.Authentication;
 
 namespace RegistryApp.Models
 {
-    public class RegistryContext : DbContext
+    public class RegistryContext : IdentityDbContext<ApplicationUser>
     {
         public RegistryContext(DbContextOptions<RegistryContext> options) : base(options) { }
 

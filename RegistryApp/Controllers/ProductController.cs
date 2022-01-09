@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RegistryApp.Dtos;
 using RegistryApp.Filters;
+using RegistryApp.Models.Authentication;
 using RegistryApp.Services.Interfaces;
 using RegistryApp.Vms;
 
@@ -48,6 +50,7 @@ namespace RegistryApp.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> Delete(int id) {
             return await _productService.DeleteProduct(id) ? NoContent() : NotFound();
         }
@@ -63,6 +66,7 @@ namespace RegistryApp.Controllers
         }
 
         [HttpPost("{productId}/removeCategory/{categoryId}")]
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> RemoveCategory(int productId, int categoryId) {
             return await _productService.RemoveCategoryFromProduct(productId,categoryId) ? NoContent() : NotFound();
         }

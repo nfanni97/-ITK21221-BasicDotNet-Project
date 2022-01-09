@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using RegistryApp.Models;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
@@ -18,6 +19,7 @@ namespace RegistryApp
                 .CreateLogger();
             CreateHostBuilder(args)
                 .Build()
+                .Seed()
                 .Run();
         }
 
