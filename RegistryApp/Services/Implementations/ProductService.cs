@@ -69,6 +69,7 @@ namespace RegistryApp.Services.Implementations
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
             var productVM = _mapper.Map<ProductVM>(product);
+            product.CategoryProducts = new List<CategoryProduct>();
             mapCategories(product, productVM);
             return productVM;
         }
